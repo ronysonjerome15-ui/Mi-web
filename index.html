@@ -156,3 +156,110 @@ body {
     window.location.href = "https://google.com";
   }, 20000);
 </script>
+
+
+<!-- FORMULARIO NIVEL DIOS -->
+<div class="contacto">
+  <h2>📩 Envíame un mensaje</h2>
+
+  <form id="formulario" action="https://formspree.io/f/mnjwanaj" method="POST">
+    
+    <input type="text" name="nombre" placeholder="Tu nombre" required>
+    
+    <input type="email" name="email" placeholder="Tu correo" required>
+
+    <textarea name="mensaje" placeholder="Escribe tu mensaje..." required></textarea>
+
+    <button type="submit">Enviar mensaje</button>
+
+  </form>
+
+  <p id="estado"></p>
+</div>
+
+<style>
+.contacto {
+    width: 90%;
+    max-width: 400px;
+    margin: 40px 0;
+    padding: 20px;
+    background: #111;
+    border-radius: 15px;
+    text-align: center;
+    position: relative;
+}
+
+/* BORDE RGB */
+.contacto::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(90deg,
+        red, orange, yellow, lime, cyan, blue, violet, red);
+    background-size: 300%;
+    border-radius: 18px;
+    animation: rgb 6s linear infinite;
+    z-index: -1;
+}
+
+.contacto input,
+.contacto textarea {
+    width: 100%;
+    margin: 10px 0;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: #222;
+    color: white;
+}
+
+.contacto button {
+    padding: 12px;
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(45deg, cyan, magenta);
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#estado {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+@keyframes rgb {
+    0% { background-position: 0% }
+    100% { background-position: 300% }
+}
+</style>
+
+<script>
+const form = document.getElementById("formulario");
+const estado = document.getElementById("estado");
+
+const LIMITE_HORAS = 10;
+const KEY = "ultimo_envio";
+
+form.addEventListener("submit", function(e) {
+    const ahora = Date.now();
+    const ultimo = localStorage.getItem(KEY);
+
+    if (ultimo) {
+        const diff = (ahora - ultimo) / (1000 * 60 * 60);
+
+        if (diff < LIMITE_HORAS) {
+            e.preventDefault();
+            const restante = (LIMITE_HORAS - diff).toFixed(1);
+            estado.innerHTML = "⛔ Espera " + restante + " horas para enviar otro mensaje";
+            estado.style.color = "orange";
+            return;
+        }
+    }
+
+    localStorage.setItem(KEY, ahora);
+    estado.innerHTML = "✅ Enviando mensaje...";
+    estado.style.color = "lime";
+});
+</script>
