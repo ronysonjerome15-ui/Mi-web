@@ -3,194 +3,234 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SAXTRA DESCARGA</title>
+<title>Registro Free Fire PRO</title>
 
 <style>
-:root {
-    --bg: #0a0a0a;
-    --text: #fff;
-}
-
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background: radial-gradient(circle at top, #1a1a1a, #000);
-    color: var(--text);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    font-family: Arial;
+    background: radial-gradient(circle at top, #1a0033, #000);
+    color: white;
 }
 
-/* REDES */
-.redes {
-    display: flex;
-    gap: 20px;
+/* CONTENEDOR */
+.container {
+    max-width: 420px;
+    margin: auto;
     padding: 15px;
 }
 
-.redes img {
-    width: 35px;
-    transition: 0.3s;
+/* IMAGEN */
+.banner {
+    width: 100%;
+    border-radius: 15px;
+    box-shadow: 0 0 25px purple;
 }
 
-.redes img:hover {
-    transform: scale(1.2);
+/* TITULOS */
+h2 {
+    text-align: center;
+    margin-top: 20px;
+    color: #fff;
+    text-shadow: 0 0 10px purple;
+}
+
+/* CAJAS */
+.box {
+    border: 1px solid rgba(255,0,255,0.5);
+    border-radius: 15px;
+    padding: 15px;
+    margin-top: 15px;
+    background: rgba(255,255,255,0.03);
+    box-shadow: 0 0 15px rgba(255,0,255,0.2);
+}
+
+/* LISTA */
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    margin: 8px 0;
+    font-size: 14px;
 }
 
 /* BOTONES */
-.container {
-    width: 90%;
-    max-width: 400px;
-    margin-top: 30px;
+.botones {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
 }
 
-.btn {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    padding: 16px;
-    margin: 15px 0;
-    border-radius: 14px;
-    color: white;
-    text-decoration: none;
-    background: #111;
-}
-
-.btn::before {
-    content: "";
-    position: absolute;
-    width: 200%;
-    height: 200%;
-    background: conic-gradient(red, yellow, lime, cyan, blue, magenta, red);
-    animation: girar 4s linear infinite;
-    z-index: -2;
-}
-
-.btn::after {
-    content: "";
-    position: absolute;
-    inset: 3px;
-    background: #111;
-    border-radius: 12px;
-}
-
-@keyframes girar {
-    100% { transform: rotate(360deg); }
-}
-
-/* FORM */
-.contacto {
-    width: 90%;
-    max-width: 400px;
-    margin: 40px 0;
-    padding: 20px;
-    background: #111;
+.card {
+    padding: 18px;
     border-radius: 15px;
     text-align: center;
-}
-
-.contacto input {
-    width: 100%;
-    margin: 10px 0;
-    padding: 12px;
-    border-radius: 10px;
-    border: none;
-}
-
-.contacto button {
-    padding: 12px;
-    width: 100%;
-    border: none;
-    border-radius: 10px;
-    background: linear-gradient(45deg, cyan, magenta);
-    font-weight: bold;
+    border: 1px solid rgba(255,0,255,0.6);
+    background: rgba(255,255,255,0.05);
     cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 0 10px rgba(255,0,255,0.2);
+}
+
+.card:hover {
+    transform: scale(1.05);
+    background: rgba(255,0,255,0.2);
+    box-shadow: 0 0 20px purple;
+}
+
+/* TEXTO DESTACADO */
+.destacado {
+    text-align: center;
+    margin: 15px 0;
+    color: gold;
+    font-weight: bold;
+    text-shadow: 0 0 10px orange;
+}
+
+/* INPUTS */
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 12px;
+    border: 1px solid #444;
+    background: rgba(255,255,255,0.05);
+    color: white;
+    transition: 0.3s;
+}
+
+input:focus {
+    outline: none;
+    border: 1px solid purple;
+    box-shadow: 0 0 10px purple;
+}
+
+/* BOTÓN */
+button {
+    width: 100%;
+    padding: 15px;
+    border-radius: 15px;
+    border: none;
+    background: linear-gradient(45deg, orange, red, purple);
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 10px;
+    cursor: pointer;
+    box-shadow: 0 0 15px purple;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 25px purple;
+}
+
+/* MENSAJE */
+#msg {
+    text-align: center;
+    margin-top: 10px;
+    display: none;
+    color: #00ff88;
 }
 </style>
 </head>
 
 <body>
 
-<!-- REDES -->
-<div class="redes">
-  <a href="https://www.tiktok.com/@soy_saxtra" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png"></a>
-  <a href="https://www.youtube.com/@soy_saxtra" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"></a>
-  <a href="https://www.instagram.com/soy_saxtra" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"></a>
-</div>
-
-<!-- BOTONES -->
 <div class="container">
-  <a class="btn" href="#"><span>AIMBOT CUELLO</span></a>
+
+<img class="banner" src="https://i.imgur.com/prAsg5u.png">
+
+<h2>REQUISITOS PARA ENTRAR</h2>
+
+<div class="box">
+<ul>
+<li>✔ Seguirme en TikTok</li>
+<li>✔ No necesitas mucho apoyo 💪</li>
+<li>✔ No importa el rango 👊</li>
+<li>✔ No necesitas jugar todos los días ⚡</li>
+<li>✔ No importa el nivel 🎯</li>
+<li>✔ Tener ganas de crecer 🚀</li>
+<li>✔ Actitud positiva 😎</li>
+<li>✔ Respeto y buena vibra 🤝</li>
+</ul>
 </div>
 
-<!-- FORMULARIO -->
-<div class="contacto">
-  <h2>📩 REGÍSTRATE</h2>
+<h2>BENEFICIOS</h2>
 
-  <form id="formulario">
-    <input type="text" id="nombre" placeholder="Nombre" required>
-    <input type="text" id="tiktok" placeholder="Usuario TikTok" required>
-    <input type="email" id="correo" placeholder="Correo" required>
-    <input type="tel" id="telefono" placeholder="Teléfono" required>
-    <button type="submit">Registrarse</button>
-  </form>
+<div class="botones">
 
-  <p id="estado"></p>
+<div class="card" onclick="alert('NADA TODAVIA')">
+🏆 Entrar al equipo
 </div>
 
-<!-- FIREBASE -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+<div class="card" onclick="alert('NADA TODAVIA')">
+📈 Crecer en TikTok
+</div>
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAZkesdFr1CwaoNxBfp3dAoIc0M8rr6fL8",
-  authDomain: "proyento-45ac9.firebaseapp.com",
-  projectId: "proyento-45ac9"
-};
+<div class="card" onclick="alert('NADA TODAVIA')">
+🎁 Eventos
+</div>
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+<div class="card" onclick="alert('NADA TODAVIA')">
+📈 Consejos
+</div>
 
-// FORM
-document.getElementById("formulario").addEventListener("submit", async (e)=>{
-  e.preventDefault();
+</div>
 
-  const nombre = document.getElementById("nombre").value;
-  const tiktok = document.getElementById("tiktok").value;
-  const correo = document.getElementById("correo").value;
-  const telefono = document.getElementById("telefono").value;
+<h2>REGISTRATE YA</h2>
+<p class="destacado">⚡ CUPOS LIMITADOS ⚡</p>
 
-  try {
-    // 🔥 GUARDAR EN FIREBASE
-    await addDoc(collection(db, "usuarios"), {
-      nombre,
-      tiktok,
-      correo,
-      telefono,
-      fecha: new Date()
-    });
+<form id="formulario" action="https://formspree.io/f/mnjwanaj" method="POST">
 
-    // 🔥 ENVIAR A FORMSpree (correo)
-    await fetch("https://formspree.io/f/mnjwanaj", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        nombre,
-        tiktok,
-        email: correo,
-        telefono
-      })
-    });
+<input type="text" name="nombre" placeholder="Nombre completo" required>
 
-    document.getElementById("estado").innerText="✅ Registro enviado y guardado";
-    document.getElementById("formulario").reset();
+<input type="url" name="tiktok_link" placeholder="https://tiktok.com/@usuario" required>
 
-  } catch (error) {
-    document.getElementById("estado").innerText="❌ Error al enviar";
-  }
+<input type="number" name="telefono" placeholder="Teléfono" required>
+
+<input type="text" name="id" placeholder="ID Free Fire" required>
+
+<button type="submit">🚀 ENVIAR REGISTRO</button>
+
+</form>
+
+<div id="msg">✅ Registro enviado correctamente</div>
+
+</div>
+
+<script>
+function abrir(link){
+    window.open(link, "_blank");
+}
+
+const form = document.getElementById("formulario");
+const msg = document.getElementById("msg");
+
+// CLAVE ÚNICA
+const userKey = navigator.userAgent + screen.width;
+
+// 24 HORAS
+const limite = 24 * 60 * 60 * 1000;
+
+const ultimoEnvio = localStorage.getItem("envio_" + userKey);
+
+if(ultimoEnvio){
+    const tiempoPasado = Date.now() - ultimoEnvio;
+
+    if(tiempoPasado < limite){
+        form.style.display = "none";
+        msg.style.display = "block";
+        msg.innerHTML = "⚠️ Ya enviaste un registro, intenta en 24 horas";
+    }
+}
+
+form.addEventListener("submit", function(){
+    localStorage.setItem("envio_" + userKey, Date.now());
+    msg.style.display = "block";
 });
 </script>
 
