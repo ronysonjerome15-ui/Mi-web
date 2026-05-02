@@ -3,13 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>SAXTRA DESCARGA</title>
 
 <style>
 :root {
     --bg: #0a0a0a;
-    --card: #111;
     --text: #fff;
 }
 
@@ -26,7 +24,6 @@ body {
 /* REDES */
 .redes {
     display: flex;
-    justify-content: center;
     gap: 20px;
     padding: 15px;
 }
@@ -40,147 +37,48 @@ body {
     transform: scale(1.2);
 }
 
-/* CONTENEDOR */
+/* BOTONES */
 .container {
     width: 90%;
     max-width: 400px;
     margin-top: 30px;
 }
 
-/* BOTÓN PRO RGB */
 .btn {
     position: relative;
     display: flex;
-    align-items: center;
     justify-content: center;
     padding: 16px;
     margin: 15px 0;
     border-radius: 14px;
-    text-decoration: none;
     color: white;
-    font-weight: bold;
+    text-decoration: none;
     background: #111;
-    overflow: hidden;
-    z-index: 1;
 }
 
-/* BORDE RGB GIRATORIO */
 .btn::before {
     content: "";
     position: absolute;
-    top: -60%;
-    left: -60%;
-    width: 220%;
-    height: 220%;
-    background: conic-gradient(
-        red, orange, yellow, lime, cyan, blue, violet, red
-    );
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(red, yellow, lime, cyan, blue, magenta, red);
     animation: girar 4s linear infinite;
     z-index: -2;
 }
 
-/* CAPA INTERNA */
 .btn::after {
     content: "";
     position: absolute;
     inset: 3px;
     background: #111;
     border-radius: 12px;
-    z-index: -1;
 }
 
-/* ANIMACIÓN */
 @keyframes girar {
-    0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
 
-/* HOVER PRO */
-.btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 25px rgba(0,255,200,0.5);
-}
-
-/* TEXTO BOTÓN */
-.btn span {
-    z-index: 2;
-}
-</style>
-</head>
-
-<body>
-
-<!-- REDES -->
-<div class="redes">
-
-  <a href="https://www.tiktok.com/@soy_saxtra" target="_blank">
-    <img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png">
-  </a>
-
-  <a href="https://www.youtube.com/@soy_saxtra" target="_blank">
-    <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">
-  </a>
-
-  <a href="https://www.instagram.com/soy_saxtra" target="_blank">
-    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png">
-  </a>
-
-</div>
-
-<!-- BOTONES -->
-<div class="container">
-
-    <!-- BOTÓN 1 -->
-    <a class="btn" href="https://www.mediafire.com/file/sfvso1eecupptkw/AIMBOT_CUELLO_FULL_%25F0%259F%2591%25B9.zip/file" target="_blank">
-        <span>AIMBOT CUELLO 30/04/26</span>
-    </a>
-<a class="btn" href="https://www.mediafire.com/file/10k5fhdnwsx0lmd/Free_Fire_OB53_Global_APK.rar/file" target="_blank">
-        <span>FF GLOBAL 29/04/26</span>
-</a>
-    <a class="btn" href="https://whatsapp.com/channel/0029VbC7DMzGzzKXhASbvi1e" target="_blank">
-        <span>CANAL DE WHATSAPP</span>
-    </a>
-    
-    <!-- COPIA PARA MÁS -->
-    <!--
-    <a class="btn" href="TU_LINK">
-        <span>Tu Link</span>
-    </a>
-    -->
-
-</div>
-
-</body>
-</html>
-
-
-<script>
-  setTimeout(() => {
-    window.location.href = "https://google.com";
-  }, 100000);
-</script>
-
-
-<!-- FORMULARIO NIVEL DIOS -->
-<div class="contacto">
-  <h2>📩 MÁNDAME UN MENSAJE</h2>
-
-  <form id="formulario" action="https://formspree.io/f/mnjwanaj" method="POST">
-    
-    <input type="text" name="nombre" placeholder="Tu nombre" required>
-    
-    <input type="email" name="email" placeholder="Tu correo" required>
-
-    <textarea name="mensaje" placeholder="Escribe tu mensaje..." required></textarea>
-
-    <button type="submit">Enviar mensaje</button>
-
-  </form>
-
-  <p id="estado"></p>
-</div>
-
-<style>
+/* FORM */
 .contacto {
     width: 90%;
     max-width: 400px;
@@ -189,31 +87,14 @@ body {
     background: #111;
     border-radius: 15px;
     text-align: center;
-    position: relative;
 }
 
-/* BORDE RGB */
-.contacto::before {
-    content: "";
-    position: absolute;
-    inset: -2px;
-    background: linear-gradient(90deg,
-        red, orange, yellow, lime, cyan, blue, violet, red);
-    background-size: 300%;
-    border-radius: 18px;
-    animation: rgb 6s linear infinite;
-    z-index: -1;
-}
-
-.contacto input,
-.contacto textarea {
+.contacto input {
     width: 100%;
     margin: 10px 0;
     padding: 12px;
     border-radius: 10px;
     border: none;
-    background: #222;
-    color: white;
 }
 
 .contacto button {
@@ -222,47 +103,96 @@ body {
     border: none;
     border-radius: 10px;
     background: linear-gradient(45deg, cyan, magenta);
-    color: black;
     font-weight: bold;
     cursor: pointer;
 }
-
-#estado {
-    margin-top: 10px;
-    font-size: 14px;
-}
-
-@keyframes rgb {
-    0% { background-position: 0% }
-    100% { background-position: 300% }
-}
 </style>
+</head>
 
-<script>
-const form = document.getElementById("formulario");
-const estado = document.getElementById("estado");
+<body>
 
-const LIMITE_HORAS = 10;
-const KEY = "ultimo_envio";
+<!-- REDES -->
+<div class="redes">
+  <a href="https://www.tiktok.com/@soy_saxtra" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png"></a>
+  <a href="https://www.youtube.com/@soy_saxtra" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"></a>
+  <a href="https://www.instagram.com/soy_saxtra" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"></a>
+</div>
 
-form.addEventListener("submit", function(e) {
-    const ahora = Date.now();
-    const ultimo = localStorage.getItem(KEY);
+<!-- BOTONES -->
+<div class="container">
+  <a class="btn" href="#"><span>AIMBOT CUELLO</span></a>
+</div>
 
-    if (ultimo) {
-        const diff = (ahora - ultimo) / (1000 * 60 * 60);
+<!-- FORMULARIO -->
+<div class="contacto">
+  <h2>📩 REGÍSTRATE</h2>
 
-        if (diff < LIMITE_HORAS) {
-            e.preventDefault();
-            const restante = (LIMITE_HORAS - diff).toFixed(1);
-            estado.innerHTML = "⛔ Espera " + restante + " horas para enviar otro mensaje";
-            estado.style.color = "orange";
-            return;
-        }
-    }
+  <form id="formulario">
+    <input type="text" id="nombre" placeholder="Nombre" required>
+    <input type="text" id="tiktok" placeholder="Usuario TikTok" required>
+    <input type="email" id="correo" placeholder="Correo" required>
+    <input type="tel" id="telefono" placeholder="Teléfono" required>
+    <button type="submit">Registrarse</button>
+  </form>
 
-    localStorage.setItem(KEY, ahora);
-    estado.innerHTML = "✅ Enviando mensaje...";
-    estado.style.color = "lime";
+  <p id="estado"></p>
+</div>
+
+<!-- FIREBASE -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-app.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAZkesdFr1CwaoNxBfp3dAoIc0M8rr6fL8",
+  authDomain: "proyento-45ac9.firebaseapp.com",
+  projectId: "proyento-45ac9"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// FORM
+document.getElementById("formulario").addEventListener("submit", async (e)=>{
+  e.preventDefault();
+
+  const nombre = document.getElementById("nombre").value;
+  const tiktok = document.getElementById("tiktok").value;
+  const correo = document.getElementById("correo").value;
+  const telefono = document.getElementById("telefono").value;
+
+  try {
+    // 🔥 GUARDAR EN FIREBASE
+    await addDoc(collection(db, "usuarios"), {
+      nombre,
+      tiktok,
+      correo,
+      telefono,
+      fecha: new Date()
+    });
+
+    // 🔥 ENVIAR A FORMSpree (correo)
+    await fetch("https://formspree.io/f/mnjwanaj", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        nombre,
+        tiktok,
+        email: correo,
+        telefono
+      })
+    });
+
+    document.getElementById("estado").innerText="✅ Registro enviado y guardado";
+    document.getElementById("formulario").reset();
+
+  } catch (error) {
+    document.getElementById("estado").innerText="❌ Error al enviar";
+  }
 });
 </script>
+
+</body>
+</html>
