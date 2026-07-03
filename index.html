@@ -114,9 +114,9 @@ animation:subir linear forwards;
 
 <body>
 
-<!-- 🎵 Música romántica -->
+<!-- 🎵 Música romántica (archivo estable) -->
 <audio id="musica" loop>
-<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_d0c7b5d3b7.mp3?filename=romantic-ambient-piano-112191.mp3" type="audio/mpeg">
+<source src="https://cdn.pixabay.com/audio/2022/10/16/audio_5c7c2c6f3a.mp3" type="audio/mpeg">
 </audio>
 
 <div class="card">
@@ -141,7 +141,7 @@ const texto=`Mi amor...
 
 Solo quería recordarte lo especial que eres para mí.
 
-Gracias por estar a mi lado, por tu sonrisa y por hacer mi vida más bonita.
+Gracias por tu amor, tu sonrisa y por hacer mi vida más bonita.
 
 Eres mi felicidad y mi razón para seguir adelante.
 
@@ -153,9 +153,9 @@ let i=0;
 
 function abrir(){
 
-// 🎵 activar música
 const audio=document.getElementById("musica");
-audio.volume=0.5;
+audio.volume=0.6;
+
 audio.play().catch(()=>{});
 
 document.querySelector("button").style.display="none";
@@ -168,11 +168,11 @@ escribir();
 
 function escribir(){
 
-if(i>=texto.length)return;
+if(i>=texto.length) return;
 
 const caja=document.getElementById("mensaje");
 
-caja.innerHTML += texto.charAt(i)=="\n" ? "<br>" : texto.charAt(i);
+caja.innerHTML += texto.charAt(i)==="\n" ? "<br>" : texto.charAt(i);
 
 i++;
 
