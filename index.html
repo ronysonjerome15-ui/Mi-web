@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pizarra en Vivo 💖</title>
+<title>LoveBoard GOD MODE 💖</title>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -12,14 +12,13 @@
 body{
 margin:0;
 font-family:Arial;
-background:linear-gradient(-45deg,#ff0080,#7928ca,#00e5ff,#00ff88);
-background-size:400% 400%;
-animation:bg 12s infinite;
 height:100vh;
 overflow:hidden;
+background:linear-gradient(-45deg,#ff0080,#7928ca,#00e5ff,#00ff88);
+background-size:400% 400%;
+animation:bg 8s infinite;
 display:flex;
 flex-direction:column;
-align-items:center;
 }
 
 @keyframes bg{
@@ -28,61 +27,147 @@ align-items:center;
 100%{background-position:0% 50%;}
 }
 
-h1{
-color:white;
-text-shadow:2px 2px 10px black;
-}
-
-#users{
-color:white;
-font-weight:bold;
-margin-bottom:5px;
-}
-
-#panel{
+/* LOGIN */
+#login{
+position:absolute;
+width:100%;
+height:100%;
 display:flex;
-gap:10px;
-margin-bottom:10px;
-flex-wrap:wrap;
 justify-content:center;
+align-items:center;
+background:rgba(0,0,0,0.7);
+z-index:99;
 }
 
-button, input{
+.box{
+background:rgba(255,255,255,0.15);
+padding:25px;
+border-radius:20px;
+color:white;
+text-align:center;
+}
+
+input{
 padding:10px;
+margin:5px;
 border:none;
 border-radius:10px;
+text-align:center;
+}
+
+/* APP */
+#app{
+display:none;
+flex-direction:column;
+height:100%;
+}
+
+#top{
+display:flex;
+justify-content:space-between;
+padding:6px;
+color:white;
 font-weight:bold;
 }
 
-#eraseBtn.active{
-background:red;
+#room{
+color:#00ffcc;
+}
+
+/* CANVAS */
+#board{
+flex:1;
+background:white;
+margin:5px;
+border-radius:15px;
+touch-action:none;
+}
+
+/* PANEL */
+#panel{
+display:flex;
+gap:5px;
+padding:5px;
+}
+
+button{
+border:none;
+padding:8px;
+border-radius:10px;
+cursor:pointer;
+font-weight:bold;
+}
+
+/* CHAT */
+#chat{
+height:140px;
+background:rgba(0,0,0,0.4);
+margin:5px;
+border-radius:15px;
+overflow:auto;
+padding:5px;
 color:white;
 }
 
-canvas{
-background:white;
-border-radius:20px;
-width:95vw;
-height:80vh;
-touch-action:none;
+.msg{
+margin:4px;
+padding:6px;
+border-radius:10px;
+max-width:70%;
+word-wrap:break-word;
+}
+
+.me{background:#ff2d55;margin-left:auto;}
+.other{background:rgba(255,255,255,0.2);}
+
+#typing{
+font-size:12px;
+opacity:0.8;
 }
 </style>
 </head>
 
 <body>
 
-<h1>💖 Pizarra en Vivo 💖</h1>
-<div id="users">Conectando...</div>
+<!-- LOGIN -->
+<div id="login">
+<div class="box">
+<h2>💖 GOD MODE</h2>
+<input id="room" placeholder="Sala">
+<br>
+<input id="name" placeholder="Nombre">
+<br>
+<button onclick="join()">Entrar</button>
+</div>
+</div>
 
-<div id="panel">
-<input type="color" id="color" value="#ff0000">
-<button id="eraseBtn" onclick="toggleErase()">🧽 Borrador OFF</button>
-<button onclick="clearBoard()">🧹 Borrar</button>
+<!-- APP -->
+<div id="app">
+
+<div id="top">
+<div id="status">Conectando...</div>
+<div id="room"></div>
 </div>
 
 <canvas id="board"></canvas>
 
+<div id="panel">
+<input type="color" id="color">
+<button onclick="sendHeart()">💖</button>
+<button onclick="toggleMusic()">🎵</button>
+<button onclick="clearBoard()">🧹</button>
+</div>
+
+<div id="chat"></div>
+
+<audio id="music" loop>
+<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
+</audio>
+
+</div>
+
 <script>
+
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyCEO4JJMZ231KicEqKQ9S0OyJRFpnrtb3o",
@@ -96,121 +181,154 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-const drawRef = db.ref("drawing");
-const usersRef = db.ref("users");
 
-// 👤 nombre obligatorio
-let name = localStorage.getItem("name");
+let room="";
+let name="";
 
-if(!name){
-name = prompt("Escribe tu nombre 💖 (obligatorio):");
-while(!name || name.trim()==""){
-name = prompt("Debes escribir tu nombre 💖:");
-}
-localStorage.setItem("name", name);
+function ref(path){
+return firebase.database().ref("rooms/"+room+"/"+path);
 }
 
-// guardar usuario conectado
-usersRef.child(name).set(true);
-usersRef.onDisconnect().remove();
+// JOIN
+function join(){
+room=document.getElementById("room").value;
+name=document.getElementById("name").value;
 
-// mostrar usuarios
-usersRef.on("value", snap=>{
-const data = snap.val();
-let list = data ? Object.keys(data).join(", ") : "Nadie conectado";
-document.getElementById("users").innerText = "👥 Conectados: " + list;
+if(!room||!name) return;
+
+localStorage.setItem("room",room);
+localStorage.setItem("name",name);
+
+document.getElementById("login").style.display="none";
+document.getElementById("app").style.display="flex";
+
+start();
+}
+
+// AUTO LOGIN
+if(localStorage.getItem("room")){
+room=localStorage.getItem("room");
+name=localStorage.getItem("name");
+document.addEventListener("DOMContentLoaded",start);
+}
+
+// START
+function start(){
+
+document.getElementById("room").innerText="🔒 "+room;
+
+/* USERS */
+const users=ref("users");
+const me=users.child(name);
+
+firebase.database().ref(".info/connected").on("value",s=>{
+if(s.val()){
+me.set(true);
+me.onDisconnect().remove();
+}
 });
 
-// canvas
-const canvas = document.getElementById("board");
-const ctx = canvas.getContext("2d");
+users.on("value",s=>{
+let d=s.val()||{};
+document.getElementById("status").innerText=
+"🟢 Online "+Object.keys(d).length;
+});
+
+/* CHAT */
+const chat=ref("chat");
+
+chat.on("child_added",s=>{
+let m=s.val();
+let d=document.createElement("div");
+d.className="msg "+(m.name==name?"me":"other");
+d.innerHTML="<b>"+m.name+"</b><br>"+m.text;
+document.getElementById("chat").appendChild(d);
+});
+
+/* DRAW OPTIMIZED */
+const draw=ref("draw");
+const c=document.getElementById("board");
+const ctx=c.getContext("2d");
 
 function resize(){
-canvas.width = window.innerWidth * 0.95;
-canvas.height = window.innerHeight * 0.8;
+c.width=c.clientWidth;
+c.height=c.clientHeight;
 }
 resize();
-window.addEventListener("resize", resize);
 
-let drawing = false;
-let erase = false;
-let last = {x:0,y:0};
+let drawing=false;
+let last={x:0,y:0};
 
-// recibir dibujo en tiempo real
-drawRef.on("child_added", snap=>{
-const d = snap.val();
-drawLine(d.x1,d.y1,d.x2,d.y2,d.color,d.erase,false);
-});
-
-function drawLine(x1,y1,x2,y2,color,eraseMode,save=true){
-ctx.lineWidth = eraseMode ? 35 : 4;
-ctx.lineCap = "round";
-
-if(eraseMode){
-ctx.globalCompositeOperation = "destination-out";
-} else {
-ctx.globalCompositeOperation = "source-over";
-ctx.strokeStyle = color;
-}
-
+draw.on("child_added",s=>{
+let d=s.val();
 ctx.beginPath();
-ctx.moveTo(x1,y1);
-ctx.lineTo(x2,y2);
+ctx.moveTo(d.x1,d.y1);
+ctx.lineTo(d.x2,d.y2);
 ctx.stroke();
-
-if(save){
-drawRef.push({x1,y1,x2,y2,color,erase:eraseMode});
-}
-}
-
-// eventos
-canvas.addEventListener("pointerdown", e=>{
-drawing = true;
-last = getPos(e);
 });
 
-canvas.addEventListener("pointermove", e=>{
-if(!drawing) return;
-
-let pos = getPos(e);
-
-drawLine(last.x,last.y,pos.x,pos.y,
-document.getElementById("color").value,
-erase
-);
-
-last = pos;
+c.addEventListener("pointerdown",e=>{
+drawing=true;
+last=get(e);
 });
 
-canvas.addEventListener("pointerup", ()=>{
-drawing = false;
+c.addEventListener("pointermove",e=>{
+if(!drawing)return;
+
+let p=get(e);
+
+draw.push({
+x1:last.x,
+y1:last.y,
+x2:p.x,
+y2:p.y,
+name:name
 });
 
-function getPos(e){
-const r = canvas.getBoundingClientRect();
-return {x:e.clientX-r.left,y:e.clientY-r.top};
+last=p;
+});
+
+c.addEventListener("pointerup",()=>drawing=false);
+
+function get(e){
+let r=c.getBoundingClientRect();
+return{x:e.clientX-r.left,y:e.clientY-r.top};
 }
 
-// borrar
-function clearBoard(){
-db.ref("drawing").remove();
-ctx.clearRect(0,0,canvas.width,canvas.height);
+/* 💖 HEARTS */
+window.sendHeart=function(){
+let h=document.createElement("div");
+h.innerHTML="💖";
+h.style.position="absolute";
+h.style.left=Math.random()*90+"vw";
+h.style.top="80vh";
+h.style.fontSize="25px";
+h.style.animation="float 2s linear";
+document.body.appendChild(h);
+setTimeout(()=>h.remove(),2000);
 }
 
-// borrador
-function toggleErase(){
-erase = !erase;
+/* 🎵 MUSIC SYNC */
+let music=document.getElementById("music");
 
-let btn = document.getElementById("eraseBtn");
-
-if(erase){
-btn.classList.add("active");
-btn.innerHTML = "🧽 Borrador ON";
-} else {
-btn.classList.remove("active");
-btn.innerHTML = "🧽 Borrador OFF";
+window.toggleMusic=function(){
+ref("music").set(true);
 }
+
+ref("music").on("value",s=>{
+if(s.val()){
+music.play();
+}else{
+music.pause();
+}
+});
+
+/* 🧹 CLEAR */
+window.clearBoard=function(){
+ref("draw").remove();
+ctx.clearRect(0,0,c.width,c.height);
+}
+
 }
 </script>
 
