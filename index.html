@@ -3,198 +3,215 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>❤️ Para Mi Amor ❤️</title>
+<title>Pizarra en Vivo 💖</title>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,Helvetica,sans-serif;
-}
-
 body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(-45deg,#ff0080,#7928ca,#00e5ff,#00ff88);
+background-size:400% 400%;
+animation:bg 12s infinite;
 height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
 overflow:hidden;
-background:linear-gradient(-45deg,#ff006e,#8338ec,#3a86ff,#06d6a0,#ffbe0b);
-background-size:500% 500%;
-animation:fondo 15s ease infinite;
+display:flex;
+flex-direction:column;
+align-items:center;
 }
 
-@keyframes fondo{
+@keyframes bg{
 0%{background-position:0% 50%;}
 50%{background-position:100% 50%;}
 100%{background-position:0% 50%;}
 }
 
-.card{
-width:92%;
-max-width:520px;
-padding:35px;
-text-align:center;
-background:rgba(255,255,255,.12);
-backdrop-filter:blur(15px);
-border:2px solid rgba(255,255,255,.25);
-border-radius:30px;
-box-shadow:0 0 35px rgba(255,255,255,.35);
-color:#fff;
-z-index:10;
-}
-
 h1{
-font-size:42px;
-font-weight:bold;
-margin-bottom:15px;
-text-shadow:3px 3px 12px #000;
-}
-
-.sub{
-font-size:21px;
-font-weight:bold;
-text-shadow:2px 2px 10px #000;
-margin-bottom:20px;
-}
-
-button{
-padding:17px 40px;
-font-size:20px;
-font-weight:bold;
-border:none;
-border-radius:50px;
-cursor:pointer;
-color:white;
-background:linear-gradient(90deg,#ff006e,#ffbe0b,#00e5ff,#00ff88,#ff006e);
-background-size:400%;
-animation:rgb 5s linear infinite;
-box-shadow:0 0 20px white;
-transition:.3s;
-}
-
-button:hover{
-transform:scale(1.08);
-}
-
-@keyframes rgb{
-100%{background-position:400%;}
-}
-
-#mensaje{
-display:none;
-margin-top:25px;
-padding:25px;
-background:rgba(0,0,0,.65);
-border-radius:20px;
-border:2px solid rgba(255,255,255,.25);
-font-size:24px;
-font-weight:bold;
-line-height:1.9;
 color:white;
 text-shadow:2px 2px 10px black;
-min-height:320px;
-overflow-y:auto;
-box-shadow:0 0 20px rgba(255,255,255,.25);
 }
 
-.heart{
-position:absolute;
-bottom:-40px;
-animation:subir linear forwards;
+#users{
+color:white;
+font-weight:bold;
+margin-bottom:5px;
 }
 
-@keyframes subir{
-0%{transform:translateY(0) scale(.5);opacity:0;}
-10%{opacity:1;}
-100%{transform:translateY(-120vh) scale(1.6);opacity:0;}
+#panel{
+display:flex;
+gap:10px;
+margin-bottom:10px;
+flex-wrap:wrap;
+justify-content:center;
+}
+
+button, input{
+padding:10px;
+border:none;
+border-radius:10px;
+font-weight:bold;
+}
+
+#eraseBtn.active{
+background:red;
+color:white;
+}
+
+canvas{
+background:white;
+border-radius:20px;
+width:95vw;
+height:80vh;
+touch-action:none;
 }
 </style>
 </head>
 
 <body>
 
-<!-- 🎵 Música romántica (archivo estable) -->
-<audio id="musica" loop>
-<source src="https://cdn.pixabay.com/audio/2022/10/16/audio_5c7c2c6f3a.mp3" type="audio/mpeg">
-</audio>
+<h1>💖 Pizarra en Vivo 💖</h1>
+<div id="users">Conectando...</div>
 
-<div class="card">
-
-<h1>❤️ Mi Princesa ❤️</h1>
-
-<div class="sub">
-Tengo un pequeño regalo para ti...
+<div id="panel">
+<input type="color" id="color" value="#ff0000">
+<button id="eraseBtn" onclick="toggleErase()">🧽 Borrador OFF</button>
+<button onclick="clearBoard()">🧹 Borrar</button>
 </div>
 
-<button onclick="abrir()">
-💖 Abrir Carta 💖
-</button>
-
-<div id="mensaje"></div>
-
-</div>
+<canvas id="board"></canvas>
 
 <script>
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyCEO4JJMZ231KicEqKQ9S0OyJRFpnrtb3o",
+  authDomain: "amor-205d5.firebaseapp.com",
+  databaseURL: "https://amor-205d5-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "amor-205d5",
+  storageBucket: "amor-205d5.firebasestorage.app",
+  messagingSenderId: "817003065590",
+  appId: "1:817003065590:web:da964f656dfd3e5786bcd7",
+  measurementId: "G-FY78WMX1FP"
+};
 
-const texto=`Mi amor...
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const drawRef = db.ref("drawing");
+const usersRef = db.ref("users");
 
-Solo quería recordarte lo especial que eres para mí.
+// 👤 nombre obligatorio
+let name = localStorage.getItem("name");
 
-Gracias por tu amor, tu sonrisa y por hacer mi vida más bonita.
-
-Eres mi felicidad y mi razón para seguir adelante.
-
-❤️ Te quiero muchísimo ❤️
-
-Siempre estarás en mi corazón.`;
-
-let i=0;
-
-function abrir(){
-
-const audio=document.getElementById("musica");
-audio.volume=0.6;
-
-audio.play().catch(()=>{});
-
-document.querySelector("button").style.display="none";
-
-const caja=document.getElementById("mensaje");
-caja.style.display="block";
-
-escribir();
+if(!name){
+name = prompt("Escribe tu nombre 💖 (obligatorio):");
+while(!name || name.trim()==""){
+name = prompt("Debes escribir tu nombre 💖:");
+}
+localStorage.setItem("name", name);
 }
 
-function escribir(){
+// guardar usuario conectado
+usersRef.child(name).set(true);
+usersRef.onDisconnect().remove();
 
-if(i>=texto.length) return;
+// mostrar usuarios
+usersRef.on("value", snap=>{
+const data = snap.val();
+let list = data ? Object.keys(data).join(", ") : "Nadie conectado";
+document.getElementById("users").innerText = "👥 Conectados: " + list;
+});
 
-const caja=document.getElementById("mensaje");
+// canvas
+const canvas = document.getElementById("board");
+const ctx = canvas.getContext("2d");
 
-caja.innerHTML += texto.charAt(i)==="\n" ? "<br>" : texto.charAt(i);
+function resize(){
+canvas.width = window.innerWidth * 0.95;
+canvas.height = window.innerHeight * 0.8;
+}
+resize();
+window.addEventListener("resize", resize);
 
-i++;
+let drawing = false;
+let erase = false;
+let last = {x:0,y:0};
 
-setTimeout(escribir,45);
+// recibir dibujo en tiempo real
+drawRef.on("child_added", snap=>{
+const d = snap.val();
+drawLine(d.x1,d.y1,d.x2,d.y2,d.color,d.erase,false);
+});
+
+function drawLine(x1,y1,x2,y2,color,eraseMode,save=true){
+ctx.lineWidth = eraseMode ? 35 : 4;
+ctx.lineCap = "round";
+
+if(eraseMode){
+ctx.globalCompositeOperation = "destination-out";
+} else {
+ctx.globalCompositeOperation = "source-over";
+ctx.strokeStyle = color;
 }
 
-function crearCorazon(){
+ctx.beginPath();
+ctx.moveTo(x1,y1);
+ctx.lineTo(x2,y2);
+ctx.stroke();
 
-const h=document.createElement("div");
-h.className="heart";
-h.innerHTML=["❤️","💖","💕","💘","💝"][Math.floor(Math.random()*5)];
-h.style.left=Math.random()*100+"vw";
-h.style.fontSize=(20+Math.random()*30)+"px";
-h.style.animationDuration=(5+Math.random()*4)+"s";
-
-document.body.appendChild(h);
-
-setTimeout(()=>h.remove(),9000);
+if(save){
+drawRef.push({x1,y1,x2,y2,color,erase:eraseMode});
+}
 }
 
-setInterval(crearCorazon,250);
+// eventos
+canvas.addEventListener("pointerdown", e=>{
+drawing = true;
+last = getPos(e);
+});
 
+canvas.addEventListener("pointermove", e=>{
+if(!drawing) return;
+
+let pos = getPos(e);
+
+drawLine(last.x,last.y,pos.x,pos.y,
+document.getElementById("color").value,
+erase
+);
+
+last = pos;
+});
+
+canvas.addEventListener("pointerup", ()=>{
+drawing = false;
+});
+
+function getPos(e){
+const r = canvas.getBoundingClientRect();
+return {x:e.clientX-r.left,y:e.clientY-r.top};
+}
+
+// borrar
+function clearBoard(){
+db.ref("drawing").remove();
+ctx.clearRect(0,0,canvas.width,canvas.height);
+}
+
+// borrador
+function toggleErase(){
+erase = !erase;
+
+let btn = document.getElementById("eraseBtn");
+
+if(erase){
+btn.classList.add("active");
+btn.innerHTML = "🧽 Borrador ON";
+} else {
+btn.classList.remove("active");
+btn.innerHTML = "🧽 Borrador OFF";
+}
+}
 </script>
 
 </body>
