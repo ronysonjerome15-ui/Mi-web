@@ -1,1 +1,268 @@
-hola mi amor cómo estas?
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>❤️ Para el Amor de Mi Vida ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;800&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+height:100vh;
+overflow:hidden;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(-45deg,#ff006e,#8338ec,#3a86ff,#06d6a0,#ffbe0b);
+background-size:500% 500%;
+animation:fondo 15s ease infinite;
+}
+
+@keyframes fondo{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+.card{
+width:92%;
+max-width:520px;
+padding:35px;
+text-align:center;
+background:rgba(255,255,255,.12);
+backdrop-filter:blur(18px);
+border-radius:30px;
+border:1px solid rgba(255,255,255,.3);
+box-shadow:0 0 40px rgba(255,255,255,.35);
+color:white;
+z-index:10;
+}
+
+h1{
+font-size:38px;
+margin-bottom:15px;
+text-shadow:0 0 20px white;
+}
+
+.sub{
+font-size:18px;
+opacity:.95;
+}
+
+button{
+margin-top:28px;
+padding:17px 40px;
+font-size:20px;
+font-weight:bold;
+border:none;
+border-radius:50px;
+cursor:pointer;
+color:white;
+background:linear-gradient(90deg,#ff006e,#ffbe0b,#00f5ff,#00ff88,#ff006e);
+background-size:500%;
+animation:rgb 5s linear infinite;
+box-shadow:0 0 30px white;
+transition:.3s;
+}
+
+button:hover{
+transform:scale(1.08);
+}
+
+@keyframes rgb{
+100%{background-position:500%;}
+}
+
+#mensaje{
+display:none;
+margin-top:25px;
+padding:22px;
+border-radius:20px;
+background:rgba(255,255,255,.18);
+font-size:20px;
+line-height:1.8;
+animation:zoom .9s;
+}
+
+@keyframes zoom{
+from{
+opacity:0;
+transform:scale(.5);
+}
+to{
+opacity:1;
+transform:scale(1);
+}
+}
+
+canvas{
+position:fixed;
+inset:0;
+pointer-events:none;
+}
+
+.heart{
+position:absolute;
+bottom:-50px;
+font-size:25px;
+animation:float 8s linear forwards;
+}
+
+@keyframes float{
+0%{
+transform:translateY(0) scale(.5);
+opacity:0;
+}
+10%{
+opacity:1;
+}
+100%{
+transform:translateY(-120vh) scale(1.8);
+opacity:0;
+}
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="fireworks"></canvas>
+
+<div class="card">
+
+<h1>❤️ Mi Princesa ❤️</h1>
+
+<div class="sub">
+Tengo un pequeño regalo para ti...
+</div>
+
+<button onclick="abrir()">
+💖 Ábrelo 💖
+</button>
+
+<div id="mensaje"></div>
+
+</div>
+
+<script>
+
+const texto=`Mi amor...
+
+Quiero que nunca olvides lo importante que eres para mí.
+
+Cada sonrisa tuya ilumina mis días y cada momento contigo se convierte en un recuerdo hermoso.
+
+Gracias por existir, por ser tú y por hacer mi mundo mucho más bonito.
+
+Prometo seguir cuidándote, apoyándote y hacer todo lo posible para verte feliz.
+
+Te quiero con todo mi corazón.
+
+❤️ Siempre tú y yo ❤️`;
+
+let i=0;
+
+function abrir(){
+
+document.querySelector("button").style.display="none";
+
+const m=document.getElementById("mensaje");
+m.style.display="block";
+
+function escribir(){
+if(i<texto.length){
+m.innerHTML+=texto.charAt(i)=="\n"?"<br>":texto.charAt(i);
+i++;
+setTimeout(escribir,35);
+}
+}
+
+escribir();
+fuegos();
+}
+
+function corazones(){
+const h=document.createElement("div");
+h.className="heart";
+h.innerHTML=["❤️","💖","💕","💘","💝"][Math.floor(Math.random()*5)];
+h.style.left=Math.random()*100+"vw";
+h.style.fontSize=(20+Math.random()*30)+"px";
+h.style.animationDuration=(5+Math.random()*4)+"s";
+document.body.appendChild(h);
+setTimeout(()=>h.remove(),9000);
+}
+
+setInterval(corazones,180);
+
+const canvas=document.getElementById("fireworks");
+const ctx=canvas.getContext("2d");
+
+canvas.width=innerWidth;
+canvas.height=innerHeight;
+
+let particles=[];
+
+function fuegos(){
+
+for(let n=0;n<180;n++){
+
+particles.push({
+
+x:canvas.width/2,
+y:canvas.height/2,
+
+dx:(Math.random()-0.5)*12,
+dy:(Math.random()-0.5)*12,
+
+life:100
+
+});
+
+}
+
+}
+
+function draw(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+particles.forEach((p,index)=>{
+
+ctx.beginPath();
+
+ctx.arc(p.x,p.y,3,0,Math.PI*2);
+
+ctx.fillStyle=`hsl(${Math.random()*360},100%,60%)`;
+
+ctx.fill();
+
+p.x+=p.dx;
+p.y+=p.dy;
+p.dy+=0.03;
+
+p.life--;
+
+if(p.life<=0){
+particles.splice(index,1);
+}
+
+});
+
+requestAnimationFrame(draw);
+
+}
+
+draw();
+
+</script>
+
+</body>
+  </html>
