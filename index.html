@@ -3,24 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>❤️ Para el Amor de Mi Vida ❤️</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;800&display=swap" rel="stylesheet">
+<title>❤️ Para Mi Amor ❤️</title>
 
 <style>
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:'Poppins',sans-serif;
+font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
 height:100vh;
-overflow:hidden;
 display:flex;
 justify-content:center;
 align-items:center;
+overflow:hidden;
 background:linear-gradient(-45deg,#ff006e,#8338ec,#3a86ff,#06d6a0,#ffbe0b);
 background-size:500% 500%;
 animation:fondo 15s ease infinite;
@@ -38,27 +36,28 @@ max-width:520px;
 padding:35px;
 text-align:center;
 background:rgba(255,255,255,.12);
-backdrop-filter:blur(18px);
+backdrop-filter:blur(15px);
+border:2px solid rgba(255,255,255,.25);
 border-radius:30px;
-border:1px solid rgba(255,255,255,.3);
-box-shadow:0 0 40px rgba(255,255,255,.35);
-color:white;
-z-index:10;
+box-shadow:0 0 35px rgba(255,255,255,.35);
+color:#fff;
 }
 
 h1{
-font-size:38px;
+font-size:42px;
+font-weight:bold;
 margin-bottom:15px;
-text-shadow:0 0 20px white;
+text-shadow:3px 3px 12px #000;
 }
 
 .sub{
-font-size:18px;
-opacity:.95;
+font-size:21px;
+font-weight:bold;
+text-shadow:2px 2px 10px #000;
+margin-bottom:20px;
 }
 
 button{
-margin-top:28px;
 padding:17px 40px;
 font-size:20px;
 font-weight:bold;
@@ -66,10 +65,10 @@ border:none;
 border-radius:50px;
 cursor:pointer;
 color:white;
-background:linear-gradient(90deg,#ff006e,#ffbe0b,#00f5ff,#00ff88,#ff006e);
-background-size:500%;
+background:linear-gradient(90deg,#ff006e,#ffbe0b,#00e5ff,#00ff88,#ff006e);
+background-size:400%;
 animation:rgb 5s linear infinite;
-box-shadow:0 0 30px white;
+box-shadow:0 0 20px white;
 transition:.3s;
 }
 
@@ -78,45 +77,33 @@ transform:scale(1.08);
 }
 
 @keyframes rgb{
-100%{background-position:500%;}
+100%{background-position:400%;}
 }
 
 #mensaje{
 display:none;
 margin-top:25px;
-padding:22px;
+padding:25px;
+background:rgba(0,0,0,.65);
 border-radius:20px;
-background:rgba(255,255,255,.18);
-font-size:20px;
-line-height:1.8;
-animation:zoom .9s;
-}
-
-@keyframes zoom{
-from{
-opacity:0;
-transform:scale(.5);
-}
-to{
-opacity:1;
-transform:scale(1);
-}
-}
-
-canvas{
-position:fixed;
-inset:0;
-pointer-events:none;
+border:2px solid rgba(255,255,255,.25);
+font-size:24px;
+font-weight:bold;
+line-height:1.9;
+color:white;
+text-shadow:2px 2px 10px black;
+min-height:320px;
+overflow-y:auto;
+box-shadow:0 0 20px rgba(255,255,255,.25);
 }
 
 .heart{
 position:absolute;
-bottom:-50px;
-font-size:25px;
-animation:float 8s linear forwards;
+bottom:-40px;
+animation:subir linear forwards;
 }
 
-@keyframes float{
+@keyframes subir{
 0%{
 transform:translateY(0) scale(.5);
 opacity:0;
@@ -125,16 +112,15 @@ opacity:0;
 opacity:1;
 }
 100%{
-transform:translateY(-120vh) scale(1.8);
+transform:translateY(-120vh) scale(1.6);
 opacity:0;
 }
 }
 </style>
+
 </head>
 
 <body>
-
-<canvas id="fireworks"></canvas>
 
 <div class="card">
 
@@ -145,7 +131,7 @@ Tengo un pequeño regalo para ti...
 </div>
 
 <button onclick="abrir()">
-💖 Ábrelo 💖
+💖 Abrir Carta 💖
 </button>
 
 <div id="mensaje"></div>
@@ -156,17 +142,19 @@ Tengo un pequeño regalo para ti...
 
 const texto=`Mi amor...
 
-Quiero que nunca olvides lo importante que eres para mí.
+Solo quería recordarte lo especial que eres para mí.
 
-Cada sonrisa tuya ilumina mis días y cada momento contigo se convierte en un recuerdo hermoso.
+Gracias por estar a mi lado, por regalarme tu sonrisa y por hacer que cada día sea más bonito.
 
-Gracias por existir, por ser tú y por hacer mi mundo mucho más bonito.
+Eres la persona que alegra mi corazón y la razón por la que sonrío tantas veces.
 
-Prometo seguir cuidándote, apoyándote y hacer todo lo posible para verte feliz.
+Deseo que siempre seas muy feliz y que nunca olvides cuánto te quiero.
 
-Te quiero con todo mi corazón.
+❤️ Te quiero muchísimo. ❤️
 
-❤️ Siempre tú y yo ❤️`;
+Siempre tendrás un lugar muy especial en mi corazón.
+
+🌹 Te Amo 🌹`;
 
 let i=0;
 
@@ -174,95 +162,57 @@ function abrir(){
 
 document.querySelector("button").style.display="none";
 
-const m=document.getElementById("mensaje");
-m.style.display="block";
+const caja=document.getElementById("mensaje");
 
-function escribir(){
-if(i<texto.length){
-m.innerHTML+=texto.charAt(i)=="\n"?"<br>":texto.charAt(i);
-i++;
-setTimeout(escribir,35);
-}
-}
+caja.style.display="block";
 
 escribir();
-fuegos();
+
 }
 
-function corazones(){
+function escribir(){
+
+if(i>=texto.length)return;
+
+const caja=document.getElementById("mensaje");
+
+if(texto.charAt(i)=="\n"){
+caja.innerHTML+="<br>";
+}else{
+caja.innerHTML+=texto.charAt(i);
+}
+
+i++;
+
+setTimeout(escribir,45);
+
+}
+
+function crearCorazon(){
+
 const h=document.createElement("div");
+
 h.className="heart";
+
 h.innerHTML=["❤️","💖","💕","💘","💝"][Math.floor(Math.random()*5)];
+
 h.style.left=Math.random()*100+"vw";
+
 h.style.fontSize=(20+Math.random()*30)+"px";
+
 h.style.animationDuration=(5+Math.random()*4)+"s";
+
 document.body.appendChild(h);
-setTimeout(()=>h.remove(),9000);
-}
 
-setInterval(corazones,180);
-
-const canvas=document.getElementById("fireworks");
-const ctx=canvas.getContext("2d");
-
-canvas.width=innerWidth;
-canvas.height=innerHeight;
-
-let particles=[];
-
-function fuegos(){
-
-for(let n=0;n<180;n++){
-
-particles.push({
-
-x:canvas.width/2,
-y:canvas.height/2,
-
-dx:(Math.random()-0.5)*12,
-dy:(Math.random()-0.5)*12,
-
-life:100
-
-});
+setTimeout(()=>{
+h.remove();
+},9000);
 
 }
 
-}
-
-function draw(){
-
-ctx.clearRect(0,0,canvas.width,canvas.height);
-
-particles.forEach((p,index)=>{
-
-ctx.beginPath();
-
-ctx.arc(p.x,p.y,3,0,Math.PI*2);
-
-ctx.fillStyle=`hsl(${Math.random()*360},100%,60%)`;
-
-ctx.fill();
-
-p.x+=p.dx;
-p.y+=p.dy;
-p.dy+=0.03;
-
-p.life--;
-
-if(p.life<=0){
-particles.splice(index,1);
-}
-
-});
-
-requestAnimationFrame(draw);
-
-}
-
-draw();
+setInterval(crearCorazon,250);
 
 </script>
 
 </body>
-  </html>
+</html>
