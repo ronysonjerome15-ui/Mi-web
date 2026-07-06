@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Nuestro Rincón Secreto ❤️</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght={300;400;600}&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -13,6 +13,8 @@
             --main-color: #ff4a75;
             --secondary-color: #96285a;
             --chat-bg: rgba(255, 255, 255, 0.95);
+            --online-color: #2ecc71;
+            --offline-color: #95a5a6;
         }
 
         * {
@@ -291,10 +293,22 @@
 
         .user-item-status {
             font-size: 0.7rem;
-            color: var(--main-color);
-            background: #ffe3e8;
-            padding: 2px 8px;
+            padding: 3px 8px;
             border-radius: 10px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .user-item-status.online {
+            color: var(--online-color);
+            background: #e8f8f0;
+        }
+        
+        .user-item-status.offline {
+            color: var(--offline-color);
+            background: #f0f3f4;
         }
 
         .typing-indicator {
@@ -395,7 +409,7 @@
         </div>
 
         <div class="users-panel" id="usersPanel">
-            <h4>En línea ahora</h4>
+            <h4>Personas registradas</h4>
             <div class="users-list" id="usersList"></div>
         </div>
 
@@ -417,8 +431,7 @@
         // ==========================================
         // 🛠️ CONFIGURA TU PROPIO FIREBASE AQUÍ ABAJO:
         // ==========================================
-        
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyCEO4JJMZ231KicEqKQ9S0OyJRFpnrtb3o",
   authDomain: "amor-205d5.firebaseapp.com",
@@ -432,11 +445,12 @@ const firebaseConfig = {
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
-        let username = localStorage.getItem("chat_username_final");
+        let username = localStorage.getItem("chat_username_v5");
         let typingTimeout;
         
         let currentChatMode = "general"; 
         let privateTargetUser = "";
+        let isFirstLoad = true; // Evita notificar todo el historial al abrir la app
 
         window.onload = function() {
             if (username) { showChatInterface(); }
@@ -448,15 +462,33 @@ const firebaseConfig = {
             if (pass !== "12345") { return alert("❌ Contraseña incorrecta"); }
             if (!name) { return alert("❌ Por favor escribe tu nombre"); }
 
-            localStorage.setItem("chat_username_final", name);
+            localStorage.setItem("chat_username_v5", name);
             username = name;
+
+            set(ref(db, 'registered_users/' + name), { username: name });
             showChatInterface();
         }
 
         function showChatInterface() {
             document.getElementById("loginScreen").style.display = "none";
             document.getElementById("chatScreen").style.display = "flex";
+            
+            // Solicitar permisos de notificación nativa en celulares/navegadores
+            if (Notification.permission !== "granted" && Notification.permission !== "denied") {
+                Notification.requestPermission();
+            }
+            
             setupChatLogic();
+        }
+
+        // Función encargada de lanzar la notificación del sistema
+        function showNotification(title, message) {
+            if (Notification.permission === "granted") {
+                new Notification(title, {
+                    body: message,
+                    icon: "https://cdn-icons-png.flaticon.com/512/3658/3658242.png"
+                });
+            }
         }
 
         window.toggleUsersPanel = function() {
@@ -484,54 +516,61 @@ const firebaseConfig = {
 
         function setupChatLogic() {
             const connectedRef = ref(db, '.info/connected');
-            const typingRef = ref(db, 'typing_final/' + username);
+            const typingRef = ref(db, 'typing_v5/' + username);
 
             onValue(connectedRef, (snap) => {
                 if (snap.val() === true) {
-                    const myPresenceRef = push(ref(db, 'online_final'));
-                    set(myPresenceRef, username);
-                    onDisconnect(myPresenceRef).remove();
+                    const statusRef = ref(db, 'online_status_v5/' + username);
+                    set(statusRef, true);
+                    onDisconnect(statusRef).remove();
                     onDisconnect(typingRef).remove();
                 }
             });
 
-            onValue(ref(db, 'online_final'), (snapshot) => {
-                const listContainer = document.getElementById("usersList");
-                listContainer.innerHTML = "";
-                let count = 0;
-
-                if (snapshot.exists()) {
-                    const users = snapshot.val();
-                    count = Object.keys(users).length;
+            onValue(ref(db, 'registered_users'), (regSnapshot) => {
+                onValue(ref(db, 'online_status_v5'), (onlineSnapshot) => {
+                    const listContainer = document.getElementById("usersList");
+                    listContainer.innerHTML = "";
                     
-                    let uniqueUsers = new Set();
-                    Object.values(users).forEach(u => uniqueUsers.add(u));
+                    const onlineUsers = onlineSnapshot.exists() ? onlineSnapshot.val() : {};
+                    let onlineCount = Object.keys(onlineUsers).length;
+                    
+                    document.getElementById("onlineCount").innerText = onlineCount;
 
-                    uniqueUsers.forEach(user => {
-                        const div = document.createElement("div");
-                        div.classList.add("user-item");
-                        div.onclick = () => startPrivateChat(user); 
-                        
-                        div.innerHTML = `
-                            <span class="user-item-name">${user === username ? 'Tú ✨' : user}</span>
-                            ${user !== username ? '<span class="user-item-status">Privado</span>' : ''}
-                        `;
-                        listContainer.appendChild(div);
-                    });
-                }
-                document.getElementById("onlineCount").innerText = count;
+                    if (regSnapshot.exists()) {
+                        const allUsers = regSnapshot.val();
+
+                        Object.keys(allUsers).forEach(userKey => {
+                            const user = allUsers[userKey].username;
+                            const isOnline = onlineUsers[user] === true;
+
+                            const div = document.createElement("div");
+                            div.classList.add("user-item");
+                            div.onclick = () => startPrivateChat(user); 
+                            
+                            div.innerHTML = `
+                                <span class="user-item-name">${user === username ? 'Tú ✨' : user}</span>
+                                <span class="user-item-status ${isOnline ? 'online' : 'offline'}">
+                                    <i class="fa-solid fa-circle" style="font-size: 8px;"></i> ${isOnline ? 'En línea' : 'Desconectado'}
+                                </span>
+                            `;
+                            listContainer.appendChild(div);
+                        });
+                    }
+                });
             });
 
-            onValue(ref(db, 'special_actions_final'), (snapshot) => {
+            onValue(ref(db, 'special_actions_v5'), (snapshot) => {
                 if (snapshot.exists()) {
                     const action = snapshot.val();
                     if(action.user !== username && (Date.now() - action.timestamp < 3000)) {
                         triggerKissAnimation();
+                        showNotification("❤️ ¡Te mandaron un beso!", `${action.user} te envió un beso gigante.`);
                     }
                 }
             });
 
-            onValue(ref(db, 'typing_final'), (snapshot) => {
+            onValue(ref(db, 'typing_v5'), (snapshot) => {
                 if (snapshot.exists()) {
                     const usersTyping = snapshot.val();
                     let list = [];
@@ -545,14 +584,17 @@ const firebaseConfig = {
             });
 
             loadMessages();
+            
+            // Pasados 3 segundos de cargar la base de datos, habilitamos las alertas activas
+            setTimeout(() => { isFirstLoad = false; }, 3000);
         }
 
         function loadMessages() {
-            let dbPath = 'messages_final';
+            let dbPath = 'messages_v5';
             
             if (currentChatMode === "private") {
                 const sortedIds = [username, privateTargetUser].sort();
-                dbPath = `private_messages/${sortedIds[0]}_and_${sortedIds[1]}`;
+                dbPath = `private_messages_v5/${sortedIds[0]}_and_${sortedIds[1]}`;
             }
 
             onValue(ref(db, dbPath), (snapshot) => {
@@ -560,7 +602,9 @@ const firebaseConfig = {
                 msgArea.innerHTML = "";
                 
                 if (snapshot.exists()) {
-                    Object.values(snapshot.val()).forEach(msg => {
+                    const messages = Object.values(snapshot.val());
+                    
+                    messages.forEach(msg => {
                         const isMe = msg.user === username;
                         const wrapper = document.createElement("div");
                         wrapper.classList.add("msg-wrapper", isMe ? "me" : "other");
@@ -576,7 +620,17 @@ const firebaseConfig = {
                         `;
                         msgArea.appendChild(wrapper);
                     });
+                    
                     msgArea.scrollTop = msgArea.scrollHeight;
+
+                    // Si llega un mensaje nuevo de otro usuario, activa la alerta flotante
+                    if (!isFirstLoad && messages.length > 0) {
+                        const lastMsg = messages[messages.length - 1];
+                        if (lastMsg.user !== username) {
+                            const origin = currentChatMode === "private" ? "💬 Privado" : "👥 General";
+                            showNotification(`Mensaje de ${lastMsg.user} (${origin})`, lastMsg.text);
+                        }
+                    }
                 }
             });
         }
@@ -585,28 +639,28 @@ const firebaseConfig = {
             const input = document.getElementById("chatInput");
             const text = input.value.trim();
             if (text) {
-                let dbPath = 'messages_final';
+                let dbPath = 'messages_v5';
                 if (currentChatMode === "private") {
                     const sortedIds = [username, privateTargetUser].sort();
-                    dbPath = `private_messages/${sortedIds[0]}_and_${sortedIds[1]}`;
+                    dbPath = `private_messages_v5/${sortedIds[0]}_and_${sortedIds[1]}`;
                 }
 
                 push(ref(db, dbPath), { user: username, text: text, timestamp: Date.now() });
                 input.value = "";
-                set(ref(db, 'typing_final/' + username), false);
+                set(ref(db, 'typing_v5/' + username), false);
             }
         }
 
         window.handleTyping = function() {
-            set(ref(db, 'typing_final/' + username), true);
+            set(ref(db, 'typing_v5/' + username), true);
             clearTimeout(typingTimeout);
             typingTimeout = setTimeout(() => {
-                set(ref(db, 'typing_final/' + username), false);
+                set(ref(db, 'typing_v5/' + username), false);
             }, 2000);
         }
 
         window.sendKiss = function() {
-            set(ref(db, 'special_actions_final'), { user: username, type: 'kiss', timestamp: Date.now() });
+            set(ref(db, 'special_actions_v5'), { user: username, type: 'kiss', timestamp: Date.now() });
             triggerKissAnimation();
         }
 
