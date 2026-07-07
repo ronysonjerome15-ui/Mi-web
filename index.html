@@ -3,30 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nuestro Rincón Secreto ❤️</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>CoreChat Pro ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-            --main-color: #ff4a75;
-            --secondary-color: #96285a;
-            --chat-bg: rgba(255, 255, 255, 0.95);
-            --online-color: #2ecc71;
-            --offline-color: #95a5a6;
+            --gradient-primary: linear-gradient(135deg, #7f00ff 0%, #e100ff 100%);
+            --gradient-bg: linear-gradient(180deg, #0f0c1b 0%, #1a102f 100%);
+            --panel-bg: rgba(30, 20, 50, 0.75);
+            --card-bg: rgba(255, 255, 255, 0.06);
+            --text-main: #ffffff;
+            --text-muted: #a0a0c0;
+            --accent-color: #00f2fe;
+            --online-glow: #2ecc71;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Inter', sans-serif;
         }
 
         body, html {
             height: 100%;
-            background: var(--bg-gradient);
+            background: var(--gradient-bg);
+            color: var(--text-main);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -35,148 +38,195 @@
             width: 100%;
         }
 
-        /* --- PANTALLA LOGIN --- */
-        .login-container {
-            background: white;
-            padding: 35px;
-            border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        /* --- PANTALLA DE CARGA (SPLASH) --- */
+        .splash-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--gradient-bg);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            border-top-color: var(--accent-color);
+            animation: spin 1s linear infinite;
+            margin-top: 20px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* --- PANTALLA DE AUTENTICACIÓN PRO --- */
+        .auth-container {
+            background: var(--panel-bg);
+            padding: 40px 30px;
+            border-radius: 24px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             width: 90%;
-            max-width: 400px;
+            max-width: 420px;
             text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
             z-index: 10;
+            display: none;
         }
 
-        .login-container h2 {
-            color: var(--main-color);
-            margin-bottom: 20px;
-            font-weight: 600;
+        .auth-container h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(45deg, #00f2fe, #4facfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        .login-container i.heart-main {
-            color: var(--main-color);
-            font-size: 3.5rem;
+        .auth-container p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+        }
+
+        .logo-icon {
+            font-size: 4rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 15px;
+            filter: drop-shadow(0 0 15px rgba(225,0,255,0.5));
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px; top: 15px;
+            color: var(--text-muted);
         }
 
         input {
             width: 100%;
-            padding: 14px;
-            margin: 10px 0;
-            border: 2px solid #ffd3dd;
-            border-radius: 25px;
+            padding: 14px 14px 14px 45px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 14px;
             outline: none;
-            font-size: 1rem;
-            transition: 0.3s;
-            text-align: center;
+            font-size: 0.95rem;
+            color: white;
+            transition: 0.3s ease;
         }
 
         input:focus {
-            border-color: var(--main-color);
-            box-shadow: 0 0 10px rgba(255,74,117,0.2);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(0,242,254,0.2);
         }
 
-        button {
+        .btn-primary {
             width: 100%;
             padding: 14px;
-            background: linear-gradient(135deg, var(--main-color), #ff6b8b);
+            background: var(--gradient-primary);
             border: none;
-            border-radius: 25px;
+            border-radius: 14px;
             color: white;
             font-size: 1rem;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
             transition: 0.3s;
-            margin-top: 10px;
-            box-shadow: 0 5px 15px rgba(255, 74, 117, 0.3);
+            box-shadow: 0 8px 25px rgba(127, 0, 255, 0.4);
         }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 74, 117, 0.4);
-        }
-
-        /* --- INTERFAZ CHAT --- */
+        /* --- CONTENEDOR CHAT PRINCIPAL --- */
         .chat-container {
             width: 100%;
             height: 100%;
             max-width: 480px;
-            background: var(--chat-bg);
+            background: rgba(15, 10, 25, 0.9);
             display: flex;
             flex-direction: column;
             z-index: 10;
-            box-shadow: 0 0 30px rgba(0,0,0,0.1);
-            backdrop-filter: blur(12px);
-            position: relative;
-            display: none; 
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.05);
+            display: none;
         }
 
         header {
-            background: linear-gradient(135deg, var(--main-color), var(--secondary-color));
-            color: white;
+            background: rgba(25, 15, 45, 0.8);
             padding: 15px 20px;
-            border-bottom-left-radius: 25px;
-            border-bottom-right-radius: 25px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            z-index: 11;
         }
 
-        header h3 {
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-
-        .header-buttons {
+        .profile-area {
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .users-toggle-btn {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 15px;
-            font-size: 0.85rem;
-            cursor: pointer;
+        .avatar-mini {
+            width: 35px;
+            height: 35px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
             display: flex;
-            align-items: center;
-            gap: 5px;
-            width: auto;
-            margin: 0;
-            box-shadow: none;
-        }
-
-        .chat-mode-banner {
-            background: #fff0f3;
-            color: var(--main-color);
-            font-size: 0.8rem;
-            text-align: center;
-            padding: 6px;
-            font-weight: 600;
-            border-bottom: 1px solid #ffe3e8;
-            display: none; 
             justify-content: center;
             align-items: center;
-            gap: 10px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .icon-btn {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.05);
+            color: white;
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        /* Banner de estado de chat */
+        .chat-mode-banner {
+            background: rgba(0, 242, 254, 0.1);
+            color: var(--accent-color);
+            padding: 8px 15px;
+            font-size: 0.8rem;
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(0,242,254,0.2);
         }
 
         .exit-private-btn {
-            background: var(--main-color);
-            color: white;
+            background: var(--accent-color);
+            color: #000;
             border: none;
-            padding: 2px 10px;
-            border-radius: 10px;
-            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-weight: 600;
             cursor: pointer;
-            width: auto;
-            margin: 0;
+            font-size: 0.75rem;
         }
 
+        /* --- ZONA DE MENSAJES --- */
         .messages-area {
             flex: 1;
             padding: 20px;
@@ -184,81 +234,73 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-            -webkit-overflow-scrolling: touch;
         }
 
         .msg-wrapper {
             display: flex;
             flex-direction: column;
-            width: 85%;
+            max-width: 75%;
         }
 
         .msg-wrapper.me { align-self: flex-end; align-items: flex-end; }
         .msg-wrapper.other { align-self: flex-start; align-items: flex-start; }
 
+        .msg-sender {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            padding: 0 5px;
+        }
+
         .msg {
             padding: 12px 16px;
-            border-radius: 20px;
+            border-radius: 18px;
             font-size: 0.95rem;
             line-height: 1.4;
             word-wrap: break-word;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            width: 100%; 
         }
 
         .msg-wrapper.me .msg {
-            background: linear-gradient(135deg, var(--main-color), #ff7597);
+            background: var(--gradient-primary);
             color: white;
-            border-bottom-right-radius: 2px;
+            border-bottom-right-radius: 3px;
         }
 
         .msg-wrapper.other .msg {
-            background: white;
-            color: #333;
-            border-bottom-left-radius: 2px;
+            background: var(--card-bg);
+            color: white;
+            border-bottom-left-radius: 3px;
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
-        .msg-info {
+        .msg-meta {
             font-size: 0.65rem;
-            color: #888;
-            margin-top: 3px;
+            color: var(--text-muted);
+            margin-top: 4px;
             padding: 0 5px;
         }
-        
-        .msg-wrapper.me .msg-info { 
-            color: #fff; 
-            text-align: right; 
-            margin-top: -18px; 
-            margin-right: 10px; 
-            position: relative;
-            z-index: 5;
-        }
 
-        /* --- PANEL DE PERSONAS --- */
+        /* --- PANEL DE USUARIOS DISPONIBLES --- */
         .users-panel {
             position: absolute;
-            top: 70px;
-            right: -100%;
-            width: 260px;
-            height: calc(100% - 70px);
-            background: white;
-            box-shadow: -5px 0 15px rgba(0,0,0,0.05);
-            border-top-left-radius: 20px;
+            top: 69px; right: -100%;
+            width: 280px;
+            height: calc(100% - 69px);
+            background: #150f26;
+            border-left: 1px solid rgba(255,255,255,0.08);
             z-index: 20;
-            transition: 0.3s ease;
+            transition: 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            padding: 15px;
         }
 
         .users-panel.active { right: 0; }
 
         .users-panel h4 {
-            color: #333;
-            font-size: 0.95rem;
-            margin-bottom: 10px;
-            border-bottom: 2px solid #fff0f3;
-            padding-bottom: 5px;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            color: var(--accent-color);
         }
 
         .users-list {
@@ -266,205 +308,179 @@
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
         }
 
         .user-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 10px 12px;
-            background: #f9f9f9;
-            border-radius: 15px;
+            padding: 12px;
+            background: var(--card-bg);
+            border-radius: 12px;
             cursor: pointer;
             transition: 0.2s;
             border: 1px solid transparent;
         }
 
         .user-item:hover {
-            background: #fff0f3;
-            border-color: #ffd3dd;
+            border-color: var(--accent-color);
+            background: rgba(0, 242, 254, 0.05);
         }
 
-        .user-item-name {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #444;
-        }
-
-        .user-item-status {
-            font-size: 0.7rem;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-weight: bold;
+        .user-item-info {
             display: flex;
             align-items: center;
-            gap: 5px;
-        }
-        
-        .user-item-status.online {
-            color: var(--online-color);
-            background: #e8f8f0;
-        }
-        
-        .user-item-status.offline {
-            color: var(--offline-color);
-            background: #f0f3f4;
+            gap: 8px;
         }
 
-        /* --- NOTIFICACIONES INTERNAS FLOTANTES --- */
+        .status-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+        }
+        .status-dot.online { background: var(--online-glow); box-shadow: 0 0 8px var(--online-glow); }
+        .status-dot.offline { background: var(--text-muted); }
+
+        /* --- NOTIFICACIONES IN-APP PRO --- */
         .app-notification {
             position: absolute;
-            top: -80px;
-            left: 5%;
-            width: 90%;
-            background: white;
-            padding: 12px 18px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            top: -100px; left: 5%; width: 90%;
+            background: rgba(25, 15, 40, 0.95);
+            padding: 15px;
+            border-radius: 16px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
             display: flex;
             align-items: center;
             gap: 12px;
             z-index: 200;
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border-left: 5px solid var(--main-color);
+            border: 1px solid var(--accent-color);
         }
 
-        .app-notification.show {
-            transform: translateY(100px);
-        }
+        .app-notification.show { transform: translateY(120px); }
 
-        .app-notification i {
-            color: var(--main-color);
-            font-size: 1.3rem;
-        }
+        .app-notification-content h5 { font-size: 0.85rem; color: var(--accent-color); }
+        .app-notification-content p { font-size: 0.8rem; color: var(--text-main); }
 
-        .app-notification-content {
-            flex: 1;
-        }
-
-        .app-notification-title {
-            font-size: 0.85rem;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .app-notification-text {
-            font-size: 0.8rem;
-            color: #666;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 220px;
-        }
-
+        /* --- ÁREA DE ENTRADA DE TEXTO --- */
         .typing-indicator {
             padding: 5px 20px;
             font-size: 0.8rem;
-            color: #764ba2;
-            font-style: italic;
-            min-height: 25px;
+            color: var(--accent-color);
+            min-height: 22px;
         }
 
         .input-area {
-            padding: 12px;
+            padding: 15px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            background: white;
-            border-top: 1px solid #f1f1f1;
-            z-index: 11;
-        }
-
-        .action-btn {
-            background: #fff0f3;
-            color: var(--main-color);
-            border: none;
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.1rem;
-            transition: 0.2s;
+            gap: 10px;
+            background: rgba(20, 12, 35, 0.9);
+            border-top: 1px solid rgba(255,255,255,0.05);
         }
 
         .input-area input {
-            margin: 0;
-            text-align: left;
             padding-left: 18px;
-            background: #f9f9f9;
-            border: 1px solid #eee;
-            height: 42px;
+            background: rgba(0,0,0,0.4);
+            height: 46px;
         }
 
-        .send-btn {
-            width: 42px;
-            height: 42px;
-            margin: 0;
-            border-radius: 50%;
+        .btn-send {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            width: 46px; height: 46px;
+            border-radius: 14px;
             display: flex;
             justify-content: center;
             align-items: center;
+            cursor: pointer;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(127,0,255,0.3);
         }
 
-        .kiss-screen {
+        /* Animación Especial de Beso */
+        .kiss-overlay {
             position: absolute;
             top:0; left:0; width:100%; height:100%;
-            pointer-events: none;
-            z-index: 100;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            pointer-events: none; z-index: 100;
+            display: flex; justify-content: center; align-items: center;
         }
-        .giant-heart {
-            font-size: 10rem;
-            color: rgba(255,74,117,0.85);
+        .giant-kiss-heart {
+            font-size: 12rem;
+            color: rgba(225, 0, 255, 0.8);
             transform: scale(0);
             display: none;
+            filter: drop-shadow(0 0 30px #e100ff);
         }
-        @keyframes giantBeat {
+        @keyframes heartPop {
             0% { transform: scale(0); opacity: 1; }
-            50% { transform: scale(1.3); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 1; }
             100% { transform: scale(1); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
+    <div class="splash-screen" id="splashScreen">
+        <i class="fa-solid fa-heart-pulse" style="font-size: 4rem; color: #e100ff;"></i>
+        <div class="spinner"></div>
+    </div>
+
     <div class="app-notification" id="appNotification">
-        <i class="fa-solid fa-comment-heart"></i>
+        <i class="fa-solid fa-bell" style="color: var(--accent-color); font-size: 1.2rem;"></i>
         <div class="app-notification-content">
-            <div class="app-notification-title" id="notifTitle">Nuevo Mensaje</div>
-            <div class="app-notification-text" id="notifText">Hola...</div>
+            <h5 id="notifTitle">Notificación</h5>
+            <p id="notifText">Contenido...</p>
         </div>
     </div>
 
-    <div class="kiss-screen"><i class="fa-solid fa-heart giant-heart" id="giantHeart"></i></div>
+    <div class="kiss-overlay"><i class="fa-solid fa-heart giant-kiss-heart" id="giantHeart"></i></div>
 
-    <div class="login-container" id="loginScreen">
-        <i class="fa-solid fa-heart heart-main"></i>
-        <h2>Nuestro Rincón Secreto</h2>
-        <input type="password" id="passInput" placeholder="Contraseña Secreta">
-        <input type="text" id="nameInput" placeholder="Tu Nombre o Apodo">
-        <button onclick="login()">Conectarse</button>
+    <div class="auth-container" id="authScreen">
+        <div class="logo-icon"><i class="fa-solid fa-bolt"></i></div>
+        <h2 id="authTitle">Crear Cuenta</h2>
+        <p id="authSubtitle">Únete al chat secreto más seguro y veloz</p>
+        
+        <div class="input-group" id="nickGroup">
+            <i class="fa-solid fa-user"></i>
+            <input type="text" id="authNickname" placeholder="Tu Apodo para el Chat">
+        </div>
+        <div class="input-group">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" id="authEmail" placeholder="Correo Electrónico">
+        </div>
+        <div class="input-group">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="authPass" placeholder="Contraseña">
+        </div>
+        
+        <button class="btn-primary" onclick="handleAuth()" id="authBtn">Registrarse</button>
+        <div class="auth-switch" onclick="switchAuthMode()" id="authSwitch">¿Ya tienes cuenta? <span>Inicia Sesión</span></div>
     </div>
+
     <div class="chat-container" id="chatScreen">
         <header>
-            <h3><i class="fa-solid fa-heart-pulse"></i> LoveChat</h3>
-            <div class="header-buttons">
-                <button class="users-toggle-btn" onclick="toggleUsersPanel()">
-                    <i class="fa-solid fa-users"></i> <span id="onlineCount">0</span>
-                </button>
+            <div class="profile-area">
+                <div class="avatar-mini" id="myAvatar">U</div>
+                <div>
+                    <h3 style="font-size:0.95rem; font-weight:600;" id="myProfileName">Cargando...</h3>
+                    <span style="font-size:0.7rem; color:var(--online-glow);">● Conectado</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="icon-btn" onclick="toggleUsersPanel()" title="Ver Usuarios"><i class="fa-solid fa-users"></i></button>
+                <button class="icon-btn" onclick="logout()" title="Cerrar Sesión" style="color:#ff4a4a;"><i class="fa-solid fa-right-from-bracket"></i></button>
             </div>
         </header>
 
         <div class="chat-mode-banner" id="privateBanner">
-            <span>Conversación privada con <b id="privateWithLabel">...</b></span>
-            <button class="exit-private-btn" onclick="exitPrivateChat()">Volver al General</button>
+            <span>Privado con <b id="privateWithLabel">...</b></span>
+            <button class="exit-private-btn" onclick="exitPrivateChat()">Salir al General</button>
         </div>
 
         <div class="users-panel" id="usersPanel">
-            <h4>Personas registradas</h4>
+            <h4>Usuarios Registrados</h4>
             <div class="users-list" id="usersList"></div>
         </div>
 
@@ -473,18 +489,35 @@
         <div class="typing-indicator" id="typingDisplay"></div>
 
         <div class="input-area">
-            <button class="action-btn" onclick="sendKiss()" title="Enviar Beso Gigante"><i class="fa-solid fa-kiss-wink-heart"></i></button>
-            <input type="text" id="chatInput" placeholder="Escribe algo tierno..." onkeypress="checkEnter(event)" oninput="handleTyping()">
-            <button class="send-btn" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+            <button class="icon-btn" onclick="sendKiss()" title="Mandar Beso"><i class="fa-solid fa-kiss-beam" style="color:#e100ff;"></i></button>
+            <input type="text" id="chatInput" placeholder="Mensaje secreto..." onkeypress="checkEnter(event)" oninput="handleTyping()">
+            <button class="btn-send" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
     </div>
 
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+
+        .auth-switch {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        .auth-switch span {
+            color: var(--accent-color);
+            font-weight: 600;
+        }
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
     <script>
-        // Tu configuración oficial de Firebase corregida
- // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        // Tu Configuración Oficial de Firebase
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyBkxCW28OYepzS0cFeJMVsuEiCabncsvVw",
   authDomain: "robert-dd6bd.firebaseapp.com",
@@ -495,140 +528,182 @@ const firebaseConfig = {
   measurementId: "G-N5WW7VK051"
 };
 
-        // Inicialización clásica global
+        // Inicialización de Servicios
         firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
         const db = firebase.database();
-        
-        let username = localStorage.getItem("chat_username_v6");
-        let typingTimeout;
-        
-        let currentChatMode = "general"; 
+
+        // Control de Estado Global
+        let currentUserData = null;
+        let currentChatMode = "general";
         let privateTargetUser = "";
         let isFirstLoad = true;
+        let isLoginMode = false; // Modo inicial: Registro
+        let typingTimeout;
 
-        window.onload = function() {
-            if (username) { showChatInterface(); }
+        // --- MANEJADOR DE PERSISTENCIA AUTOMÁTICA DE SESIÓN ---
+        auth.onAuthStateChanged((user) => {
+            const splash = document.getElementById("splashScreen");
+            if (user) {
+                // Si el usuario ya inició sesión previamente, buscamos su apodo en la base de datos
+                db.ref('users_profiles/' + user.uid).once('value').then((snapshot) => {
+                    if (snapshot.exists()) {
+                        currentUserData = snapshot.val();
+                        currentUserData.uid = user.uid;
+                        launchChatInterface();
+                    } else {
+                        // Resguardo por si el perfil no se creó correctamente
+                        logout();
+                    }
+                    splash.style.opacity = "0";
+                    setTimeout(() => splash.style.display = "none", 500);
+                });
+            } else {
+                // No hay sesión activa: Mostrar pantalla de acceso
+                document.getElementById("chatScreen").style.display = "none";
+                document.getElementById("authScreen").style.display = "block";
+                splash.style.opacity = "0";
+                setTimeout(() => splash.style.display = "none", 500);
+            }
+        });
+
+        // --- CAMBIAR ENTRE REGISTRO E INICIO DE SESIÓN ---
+        window.switchAuthMode = function() {
+            isLoginMode = !isLoginMode;
+            const title = document.getElementById("authTitle");
+            const subtitle = document.getElementById("authSubtitle");
+            const nickGroup = document.getElementById("nickGroup");
+            const btn = document.getElementById("authBtn");
+            const switchTxt = document.getElementById("authSwitch");
+
+            if (isLoginMode) {
+                title.innerText = "Iniciar Sesión";
+                subtitle.innerText = "Ingresa tus credenciales para volver al chat";
+                nickGroup.style.display = "none";
+                btn.innerText = "Entrar";
+                switchTxt.innerHTML = "¿No tienes cuenta? <span>Regístrate</span>";
+            } else {
+                title.innerText = "Crear Cuenta";
+                subtitle.innerText = "Únete al chat secreto más seguro y veloz";
+                nickGroup.style.display = "block";
+                btn.innerText = "Registrarse";
+                switchTxt.innerHTML = "¿Ya tienes cuenta? <span>Inicia Sesión</span>";
+            }
         }
 
-        window.login = function() {
-            const pass = document.getElementById("passInput").value;
-            const name = document.getElementById("nameInput").value.trim();
-            if (pass !== "12345") { return alert("❌ Contraseña incorrecta"); }
-            if (!name) { return alert("❌ Por favor escribe tu nombre"); }
+        // --- SISTEMA DE AUTENTICACIÓN AVANZADA ---
+        window.handleAuth = function() {
+            const email = document.getElementById("authEmail").value.trim();
+            const pass = document.getElementById("authPass").value;
+            const nickname = document.getElementById("authNickname").value.trim();
 
-            localStorage.setItem("chat_username_v6", name);
-            username = name;
+            if (!email || !pass) return alert("❌ Completa los campos de correo y contraseña.");
+            if (pass.length < 6) return alert("❌ La contraseña debe tener al menos 6 caracteres.");
 
-            db.ref('registered_users/' + name).set({ username: name });
-            showChatInterface();
+            if (isLoginMode) {
+                // Iniciar Sesión Tradicional
+                auth.signInWithEmailAndPassword(email, pass).catch(err => {
+                    alert("❌ Error: " + err.message);
+                });
+            } else {
+                // Crear Cuenta Nueva con Perfil Relacionado
+                if (!nickname) return alert("❌ Elige un apodo para mostrar en el chat.");
+                
+                auth.createUserWithEmailAndPassword(email, pass).then((cred) => {
+                    const userProfile = {
+                        username: nickname,
+                        email: email
+                    };
+                    // Guardamos el apodo asignado a su ID único de Firebase Auth
+                    return db.ref('users_profiles/' + cred.user.uid).set(userProfile).then(() => {
+                        currentUserData = userProfile;
+                        currentUserData.uid = cred.user.uid;
+                    });
+                }).catch(err => {
+                    alert("❌ Error al registrarse: " + err.message);
+                });
+            }
         }
 
-        function showChatInterface() {
-            document.getElementById("loginScreen").style.display = "none";
+        // --- ENTRADA AUTOMÁTICA AL CHAT ---
+        function launchChatInterface() {
+            document.getElementById("authScreen").style.display = "none";
             document.getElementById("chatScreen").style.display = "flex";
-            setupChatLogic();
-        }
-
-        // Función que despliega la alerta flotante visual dentro de tu app
-        function triggerAppNotification(title, text) {
-            const notif = document.getElementById("appNotification");
-            document.getElementById("notifTitle").innerText = title;
-            document.getElementById("notifText").innerText = text;
             
-            notif.classList.add("show");
+            // Configurar datos visuales del perfil del usuario
+            document.getElementById("myProfileName").innerText = currentUserData.username;
+            document.getElementById("myAvatar").innerText = currentUserData.username.substring(0,2).toUpperCase();
             
-            setTimeout(() => {
-                notif.classList.remove("show");
-            }, 3500);
+            setupChatEngine();
         }
 
-        window.toggleUsersPanel = function() {
-            document.getElementById("usersPanel").classList.toggle("active");
-        }
+        // --- MOTOR LOGÍCO EN TIEMPO REAL ---
+        function setupChatEngine() {
+            const myStatusRef = db.ref('online_status_v7/' + currentUserData.uid);
+            const myTypingRef = db.ref('typing_v7/' + currentUserData.uid);
 
-        window.startPrivateChat = function(targetUser) {
-            if (targetUser === username) return; 
-            currentChatMode = "private";
-            privateTargetUser = targetUser;
-            
-            document.getElementById("privateWithLabel").innerText = targetUser;
-            document.getElementById("privateBanner").style.display = "flex";
-            document.getElementById("usersPanel").classList.remove("active");
-            
-            loadMessages(); 
-        }
-
-        window.exitPrivateChat = function() {
-            currentChatMode = "general";
-            privateTargetUser = "";
-            document.getElementById("privateBanner").style.display = "none";
-            loadMessages(); 
-        }
-
-        function setupChatLogic() {
-            const connectedRef = db.ref('.info/connected');
-            const typingRef = db.ref('typing_v6/' + username);
-
-            connectedRef.on('value', (snap) => {
+            // Control de Estado Online/Offline Automático
+            db.ref('.info/connected').on('value', (snap) => {
                 if (snap.val() === true) {
-                    const statusRef = db.ref('online_status_v6/' + username);
-                    statusRef.set(true);
-                    statusRef.onDisconnect().remove();
-                    typingRef.onDisconnect().remove();
+                    myStatusRef.set({ username: currentUserData.username, status: "online" });
+                    myStatusRef.onDisconnect().remove();
+                    myTypingRef.onDisconnect().remove();
                 }
             });
 
-            db.ref('registered_users').on('value', (regSnapshot) => {
-                db.ref('online_status_v6').on('value', (onlineSnapshot) => {
-                    const listContainer = document.getElementById("usersList");
-                    listContainer.innerHTML = "";
-                    
-                    const onlineUsers = onlineSnapshot.exists() ? onlineSnapshot.val() : {};
-                    let onlineCount = Object.keys(onlineUsers).length;
-                    
-                    document.getElementById("onlineCount").innerText = onlineCount;
+            // Sincronización y Renderizado de Lista de Personas Conectadas
+            db.ref('online_status_v7').on('value', (snapshot) => {
+                const listContainer = document.getElementById("usersList");
+                listContainer.innerHTML = "";
+                
+                const onlineUsers = snapshot.exists() ? snapshot.val() : {};
+                let count = Object.keys(onlineUsers).length;
+                
+                // Muestra cuántas personas hay conectadas en tiempo real
+                document.getElementById("onlineCount").innerText = count;
 
-                    if (regSnapshot.exists()) {
-                        const allUsers = regSnapshot.val();
+                // Renderizar los perfiles en el panel lateral
+                Object.keys(onlineUsers).forEach(uidKey => {
+                    if (uidKey !== currentUserData.uid) {
+                        const targetData = onlineUsers[uidKey];
+                        const div = document.createElement("div");
+                        div.classList.add("user-item");
+                        div.onclick = () => startPrivateChat(uidKey, targetData.username);
 
-                        Object.keys(allUsers).forEach(userKey => {
-                            const user = allUsers[userKey].username;
-                            const isOnline = onlineUsers[user] === true;
-
-                            const div = document.createElement("div");
-                            div.classList.add("user-item");
-                            div.onclick = () => startPrivateChat(user); 
-                            
-                            div.innerHTML = `
-                                <span class="user-item-name">${user === username ? 'Tú ✨' : user}</span>
-                                <span class="user-item-status ${isOnline ? 'online' : 'offline'}">
-                                    <i class="fa-solid fa-circle" style="font-size: 8px;"></i> ${isOnline ? 'En línea' : 'Desconectado'}
-                                </span>
-                            `;
-                            listContainer.appendChild(div);
-                        });
+                        div.innerHTML = `
+                            <div class="user-item-info">
+                                <div class="status-dot online"></div>
+                                <span class="user-item-name">${targetData.username}</span>
+                            </div>
+                            <i class="fa-solid fa-comment-dots" style="color:var(--accent-color); font-size:0.85rem;"></i>
+                        `;
+                        listContainer.appendChild(div);
                     }
                 });
             });
 
-            db.ref('special_actions_v6').on('value', (snapshot) => {
+            // Receptor de Acciones Especiales (Efecto Beso)
+            db.ref('special_actions_v7').on('value', (snapshot) => {
                 if (snapshot.exists()) {
                     const action = snapshot.val();
-                    if(action.user !== username && (Date.now() - action.timestamp < 3000)) {
+                    if (action.uid !== currentUserData.uid && (Date.now() - action.timestamp < 3000)) {
                         triggerKissAnimation();
-                        triggerAppNotification("❤️ ¡Beso recibido!", `${action.user} te mandó un beso gigante.`);
+                        triggerAppNotification("❤️ ¡Beso Recibido!", `${action.sender} te envió un beso gigante.`);
                     }
                 }
             });
 
-            db.ref('typing_v6').on('value', (snapshot) => {
+            // Monitoreo de Indicador de Escritura
+            db.ref('typing_v7').on('value', (snapshot) => {
                 if (snapshot.exists()) {
-                    const usersTyping = snapshot.val();
-                    let list = [];
-                    for(let key in usersTyping) {
-                        if(key !== username && usersTyping[key] === true) list.push(key);
-                    }
-                    document.getElementById("typingDisplay").innerText = list.length > 0 ? `✍️ ${list.join(', ')} está escribiendo...` : '';
+                    const data = snapshot.val();
+                    let writing = [];
+                    Object.keys(data).forEach(id => {
+                        if (id !== currentUserData.uid && data[id].isTyping === true) {
+                            writing.push(data[id].name);
+                        }
+                    });
+                    document.getElementById("typingDisplay").innerText = writing.length > 0 ? `✍️ ${writing.join(', ')} está escribiendo...` : '';
                 } else {
                     document.getElementById("typingDisplay").innerText = '';
                 }
@@ -638,14 +713,16 @@ const firebaseConfig = {
             setTimeout(() => { isFirstLoad = false; }, 3000);
         }
 
+        // --- GESTOR DE MENSAJES (GENERAL / PRIVADO) ---
         function loadMessages() {
-            let dbPath = 'messages_v6';
+            let dbPath = 'messages_v7';
             
             if (currentChatMode === "private") {
-                const sortedIds = [username, privateTargetUser].sort();
-                dbPath = `private_messages_v6/${sortedIds[0]}_and_${sortedIds[1]}`;
+                const sortedIds = [currentUserData.uid, privateTargetUser].sort();
+                dbPath = `private_messages_v7/${sortedIds[0]}_and_${sortedIds[1]}`;
             }
 
+            db.ref(dbPath).off(); // Limpiar oyentes anteriores
             db.ref(dbPath).on('value', (snapshot) => {
                 const msgArea = document.getElementById("msgArea");
                 msgArea.innerHTML = "";
@@ -654,62 +731,83 @@ const firebaseConfig = {
                     const messages = Object.values(snapshot.val());
                     
                     messages.forEach(msg => {
-                        const isMe = msg.user === username;
+                        const isMe = msg.uid === currentUserData.uid;
                         const wrapper = document.createElement("div");
                         wrapper.classList.add("msg-wrapper", isMe ? "me" : "other");
 
                         const timeStr = new Date(msg.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
                         wrapper.innerHTML = `
-                            <div class="msg">
-                                <b style="font-size:0.75rem; display:block; margin-bottom:2px; color:${isMe ? '#fff' : 'var(--main-color)'}">${isMe ? 'Tú' : msg.user}</b>
-                                ${msg.text}
-                            </div>
-                            <div class="msg-info">${timeStr}</div>
+                            ${!isMe ? `<div class="msg-sender">${msg.sender}</div>` : ''}
+                            <div class="msg">${msg.text}</div>
+                            <div class="msg-meta">${timeStr}</div>
                         `;
                         msgArea.appendChild(wrapper);
                     });
                     
                     msgArea.scrollTop = msgArea.scrollHeight;
 
-                    // Lanza la notificación flotante si llega un mensaje de la otra persona
+                    // Alertas Flotantes in-app si el mensaje llega en segundo plano
                     if (!isFirstLoad && messages.length > 0) {
                         const lastMsg = messages[messages.length - 1];
-                        if (lastMsg.user !== username) {
-                            const origin = currentChatMode === "private" ? "💬 Privado" : "👥 General";
-                            triggerAppNotification(`De: ${lastMsg.user} (${origin})`, lastMsg.text);
+                        if (lastMsg.uid !== currentUserData.uid) {
+                            const modeName = currentChatMode === "private" ? "💬 Privado" : "👥 General";
+                            triggerAppNotification(`De: ${lastMsg.sender} (${modeName})`, lastMsg.text);
                         }
                     }
                 }
             });
         }
 
+        // --- ACCIONES Y ACTIVADORES DE INTERFAZ ---
         window.sendMessage = function() {
             const input = document.getElementById("chatInput");
             const text = input.value.trim();
             if (text) {
-                let dbPath = 'messages_v6';
+                let dbPath = 'messages_v7';
                 if (currentChatMode === "private") {
-                    const sortedIds = [username, privateTargetUser].sort();
-                    dbPath = `private_messages_v6/${sortedIds[0]}_and_${sortedIds[1]}`;
+                    const sortedIds = [currentUserData.uid, privateTargetUser].sort();
+                    dbPath = `private_messages_v7/${sortedIds[0]}_and_${sortedIds[1]}`;
                 }
 
-                db.ref(dbPath).push({ user: username, text: text, timestamp: Date.now() });
+                db.ref(dbPath).push({
+                    uid: currentUserData.uid,
+                    sender: currentUserData.username,
+                    text: text,
+                    timestamp: Date.now()
+                });
+                
                 input.value = "";
-                db.ref('typing_v6/' + username).set(false);
+                db.ref('typing_v7/' + currentUserData.uid).set({ isTyping: false });
             }
         }
 
         window.handleTyping = function() {
-            db.ref('typing_v6/' + username).set(true);
+            db.ref('typing_v7/' + currentUserData.uid).set({ isTyping: true, name: currentUserData.username });
             clearTimeout(typingTimeout);
             typingTimeout = setTimeout(() => {
-                db.ref('typing_v6/' + username).set(false);
+                db.ref('typing_v7/' + currentUserData.uid).set({ isTyping: false });
             }, 2000);
         }
 
+        window.startPrivateChat = function(targetUid, targetName) {
+            currentChatMode = "private";
+            privateTargetUser = targetUid;
+            document.getElementById("privateWithLabel").innerText = targetName;
+            document.getElementById("privateBanner").style.display = "flex";
+            document.getElementById("usersPanel").classList.remove("active");
+            loadMessages();
+        }
+
+        window.exitPrivateChat = function() {
+            currentChatMode = "general";
+            privateTargetUser = "";
+            document.getElementById("privateBanner").style.display = "none";
+            loadMessages();
+        }
+
         window.sendKiss = function() {
-            db.ref('special_actions_v6').set({ user: username, type: 'kiss', timestamp: Date.now() });
+            db.ref('special_actions_v7').set({ uid: currentUserData.uid, sender: currentUserData.username, type: 'kiss', timestamp: Date.now() });
             triggerKissAnimation();
         }
 
@@ -717,10 +815,28 @@ const firebaseConfig = {
             const heart = document.getElementById("giantHeart");
             heart.style.display = "block";
             heart.style.animation = "none";
-            setTimeout(() => {
-                heart.style.animation = "giantBeat 2.5s ease forwards";
-            }, 10);
+            setTimeout(() => { heart.style.animation = "heartPop 2.5s ease forwards"; }, 10);
             setTimeout(() => { heart.style.display = "none"; }, 2500);
+        }
+
+        function triggerAppNotification(title, text) {
+            const notif = document.getElementById("appNotification");
+            document.getElementById("notifTitle").innerText = title;
+            document.getElementById("notifText").innerText = text;
+            notif.classList.add("show");
+            setTimeout(() => { notif.classList.remove("show"); }, 3500);
+        }
+
+        window.toggleUsersPanel = function() {
+            document.getElementById("usersPanel").classList.toggle("active");
+        }
+
+        window.logout = function() {
+            if(currentUserData) {
+                db.ref('online_status_v7/' + currentUserData.uid).remove();
+                db.ref('typing_v7/' + currentUserData.uid).remove();
+            }
+            auth.signOut();
         }
 
         window.checkEnter = function(e) { if (e.key === 'Enter') sendMessage(); }
